@@ -19,8 +19,7 @@ oracledb.getConnection(
       return;
     }
     connection.execute(
-      "",
-      [180],
+      "SELECT * FROM MEDAL",
       function(err, result)
       {
         if (err) {
