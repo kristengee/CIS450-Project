@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="MyApp">
+<head>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/css/bootstrap.min.css" integrity="sha384-2hfp1SzUoho7/TsGGGDaFdsuuDL0LX2hnUp6VkX3CUQ2K4K+xjboZdsXyp4oUHZj" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.4/js/bootstrap.min.js" integrity="sha384-VjEeINv9OSwtWFLAtmc4JCtEJXXBub00gtSnszmspDLCtC0I4z4nqz7rEFbIZLLU" crossorigin="anonymous"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<script rel="stylesheet" type="text/css" src ="/views/agency.min.css"></script>
+<link rel='stylesheet' type='text/css' href='/public/jumbotron.css'>
+	<title>CIS 450 Final Project</title>
+</head>
+
+<style type="text/css">
+	#footer {
+   position:absolute;
+   bottom:0;
+   text-align: center;
+   width:100%;
+   height:60px;   /* Height of the footer */
+}
+
+</style>
+
+<body>
+ <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+ <script src="controllers/controller.js"></script>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">CIS 450 Final Project</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+        	<ul class="nav navbar-nav navbar-left">
+        		<li class="active"><a href="/">Home</a></li>
+        		<li class="inactive"><a href="/hello">About</a></li>
+        		<!-- <li class="dropdown">
+        			<a class="dropdown-toggle" data-toggle="dropdown">About</a>
+        			<ul class="dropdown-menu" role="menu">
+        				<li class="dropdown-header">About Wasabi</li>
+        				<li><a href="about">Wasabi's Story</a></li>
+        				<li class="dropdown-header">About Us</li>
+        				<li><a href="us">Our Team</a></li>
+        			</ul>
+        		</li> -->
+        	</ul>
+</nav>
+
+
+
+
+<div class="container">
+	<div id="custom-search-input">
+		<form action="/test">
+			<div class="input-group col-md-12">
+            	<input type="text" class="form-control input-lg" placeholder="Search" name="query"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-info btn-lg" type="submit">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+    		</div>
+    	</form>
+	</div>
+</div>
+
+
+</body>
+
+<footer>
+<div id="footer">
+  	&#169; Lawrence Choi, Kristen Gee, Ryan O'Gorman
+  	</div>
+</footer>
+</html>
+
+
