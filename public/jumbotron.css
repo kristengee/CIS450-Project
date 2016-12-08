@@ -1,5 +1,15 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
-body {
+html, body {
+  height: 100%;
+  margin: 0;
   padding-top: 50px;
-  padding-bottom: 20px;
+}
+
+.container {
+  min-height: 100%;
+  margin-bottom: -50px;
+}
+
+footer, .push {
+  height: 50px;
 }
