@@ -11,6 +11,8 @@ app.use(express.static(__dirname + '/'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+var db;
+
 function doRelease(connection)
 {
   connection.release(
@@ -21,11 +23,15 @@ function doRelease(connection)
     });
 }
 
-MongoClient.connect(url, function (err, db) {
+MongoClient.connect(url, function (err, database) {
 	if (err) {
 		console.log('Unable to connect to the mongoDB server. Error:', err);
 	} else {
 		console.log('Connection establised to', url);
+		db = database;
+		app.listen('3000', function(){
+			console.log('Server running on port 3000');
+		});
 	}
 })
 
@@ -33,13 +39,35 @@ app.get('/', function (req, res) {
 	res.render('index');
 });
 
-// When the server receives a get request with the path /hello, it will respnd by send an html file back to the client using the sendfile() function
-app.get('/hello', function(req, res){
-	res.sendFile("./hello.html");
-});
-
 app.get('/athlete', function (req, res) {
-	res.render('athlete', {name: req.query.name});
+	oracledb.getConnection(
+	  {
+	    user          : "cis550projectklr",
+	    password      : "cis550projectgco",
+	    connectString : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cis550project.czyk6pisuibz.us-west-2.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SID=MyDB)))"
+	  },
+	  function(err, connection)
+	  {
+	    if (err) {
+	      console.error(err.message);
+	      return;
+	    }
+	    connection.execute(
+	      "SELECT a.country, m.type, COUNT(*) FROM MEDAL m INNER JOIN ATHLETE a ON m.athlete_id = a.id WHERE a.name = \'" + req.query.name + "\' GROUP BY m.Type, a.country ",
+	      function(err, result)
+	      {
+	        if (err) {
+	          console.error(err.message);
+	          doRelease(connection);
+	          return;
+	        }
+	        res.render('athlete', {
+	        	name: req.query.name,
+	        	results: result.rows
+	        });
+	        doRelease(connection);
+	      });
+	  });
 })
 
 app.get('/athletesearch', function (req, res) {
@@ -84,6 +112,7 @@ app.get('/athleteresults', function (req, res) {
 	  });
 });
 
-app.listen('3000', function(){
-	console.log('Server running on port 3000');
-});
+app.get('/country/:name', function (req, res) {
+	console.log(db.collection.countries.find({'Country': req.params.name}));
+})
+
