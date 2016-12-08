@@ -1,6 +1,10 @@
 var express = require('express');
 var app = express();
 var oracledb = require('oracledb');
+var mongodb = require('mongodb');
+
+var MongoClient = mongodb.MongoClient;
+var url = 'mongodb://ec2-35-162-23-28.us-west-2.compute.amazonaws.com/local'
 
 //This function allows express to load static files from the root directory. In this case the express app will load the default html file (index.html)
 app.use(express.static(__dirname + '/'));
@@ -16,6 +20,14 @@ function doRelease(connection)
       }
     });
 }
+
+MongoClient.connect(url, function (err, db) {
+	if (err) {
+		console.log('Unable to connect to the mongoDB server. Error:', err);
+	} else {
+		console.log('Connection establised to', url);
+	}
+})
 
 app.get('/', function (req, res) {
 	res.sendFile('./views/index.html');
@@ -44,7 +56,7 @@ app.get('/test', function (req, res) {
 	      return;
 	    }
 	    connection.execute(
-	      "SELECT * FROM MEDAL m INNER JOIN ATHLETE a ON m.athlete_id = a.id WHERE a.name LIKE \'" + req.query.query + "%\'",
+	      "SELECT * FROM MEDAL m INNER JOIN ATHLETE a ON m.athlete_id = a.id WHERE a.name LIKE \'" + req.query.query.toUpperCase() + "%\'",
 	      function(err, result)
 	      {
 	        if (err) {
