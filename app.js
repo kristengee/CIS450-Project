@@ -2,7 +2,8 @@ var express = require('express');
 var app = express();
 var oracledb = require('oracledb');
 var mongodb = require('mongodb');
-
+var infobox = require('wiki-infobox');
+var md5 = require("blueimp-md5");
 var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://ec2-35-162-23-28.us-west-2.compute.amazonaws.com/local'
 
@@ -10,6 +11,9 @@ var url = 'mongodb://ec2-35-162-23-28.us-west-2.compute.amazonaws.com/local'
 app.use(express.static(__dirname + '/'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
+
+
+
 
 var db;
 
@@ -61,11 +65,39 @@ app.get('/athlete/:id', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
-	        res.render('athlete', {
-	        	id: req.params.id,
-	        	results: result.rows
-	        });
-	        doRelease(connection);
+	        console.log(result.rows);
+	        var name = result.rows[0][1].split(", ");
+	        var page = (name[1] + " " + name[0]).replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	        console.log(name);
+	        console.log(page);
+			var language = 'en';
+			var a;
+			infobox(page, language, function (err, data) {
+				if (err) {
+					//Add render even if infobox not retrieved
+					//Fix case for strange names (kristen babb-sprague)
+					console.log(err);
+					return;
+				} else {
+					a = data;
+					console.log(data);
+					console.log("hometown: " + data.birth_date.value);
+					var bday = a.birth_date.value.replace(/[{}]/g, "").split('|');
+					var birthdate = bday[2] + '/' + bday[3] + '/' + bday[1];
+					var imgFileName = data.image.value.replace(/ /g, "_");
+					console.log(md5(imgFileName));
+					var hash = md5(imgFileName);
+					var imgURL = "https://upload.wikimedia.org/wikipedia/commons/" + hash.substring(0,1) + "/" + hash.substring(0,2) + "/" + imgFileName;
+					console.log(imgURL);
+	        		res.render('athlete', {
+	        			id: req.params.id,
+	        			results: result.rows,
+	        			birth_date: birthdate,
+	        			pic: imgURL
+	        		});
+	        		doRelease(connection);
+				}
+			});
 	      });
 	  });
 })

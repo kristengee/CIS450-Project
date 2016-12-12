@@ -56,9 +56,13 @@
 	<div class="container">
 		<div class="col-lg-9">
 			<h1><%= results[0][1] %></h1>
+			<img src=<%= pic %> class="flag">
 			<h3>Medals:</h3>
 			<% for (var i = 0; i < results.length; i++) { %>
 				<%= results[i][3] %>: <%= results[i][4] %> <br>
+			<% } %>
+			<% if (birth_date.indexOf('undefined') === -1) { %>
+				<h3> Date of Birth: <%= birth_date%> </h3>
 			<% } %>
 			<a href= <%= '/country/'+results[0][0] %>><h3>Country:  <%= results[0][0] %></h3></a>
 		</div>
