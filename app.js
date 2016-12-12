@@ -81,7 +81,6 @@ app.get('/athleteresults', function (req, res) {
 		condition += "LOWER(a.name) LIKE LOWER(\'%" + words[i] + "%\') AND ";
 	}
 	condition = condition.slice(0, -4);
-	console.log(condition);
 	oracledb.getConnection(
 	  {
 	    user          : "cis550projectklr",
@@ -113,6 +112,8 @@ app.get('/athleteresults', function (req, res) {
 });
 
 app.get('/country/:name', function (req, res) {
-	console.log(db.collection.countries.find({'Country': req.params.name}));
+	db.collection('countries').findOne({Country: req.params.name}, function (err, results) {
+		res.render('country', {data: results});
+	});
 })
 

@@ -13,3 +13,7 @@ html, body {
 footer, .push {
   height: 50px;
 }
+
+.flag {
+	width: 300px;
+}
