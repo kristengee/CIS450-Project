@@ -121,3 +121,41 @@ app.get('/country/:name', function (req, res) {
 	});
 })
 
+app.get('/countryresults', function (req, res) {
+	var condition = "";
+	var words = req.query.query.split(" ");
+	for (var i = 0; i < words.length; i++) {
+		condition += "LOWER(name) LIKE LOWER(\'%" + words[i] + "%\') AND ";
+	}
+	
+	condition = condition.slice(0, -4);
+	oracledb.getConnection(
+	  {
+	    user          : "cis550projectklr",
+	    password      : "cis550projectgco",
+	    connectString : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cis550project.czyk6pisuibz.us-west-2.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SID=MyDB)))"
+	  },
+	  function(err, connection)
+	  {
+	    if (err) {
+	      console.error(err.message);
+	      return;
+	    }
+	    connection.execute(
+	      "SELECT * FROM Country WHERE " + condition,
+	      function(err, result)
+	      {
+	        if (err) {
+	          console.error(err.message);
+	          doRelease(connection);
+	          return;
+	        }
+	        res.render('countryresults', {
+	        	headers: result.metaData,
+	        	results: result.rows
+	        });
+	        doRelease(connection);
+	      });
+	  });
+});
+
