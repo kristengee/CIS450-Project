@@ -9,20 +9,22 @@
 <script rel="stylesheet" type="text/css" src ="/views/agency.min.css"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	    $(".table-row").click(function() {
-	    	var name = $(this).find('.name-col').text();
-	    	var url = $(this).data("href") + '?name=' + name;
-	        window.document.location = url.replace(/ /g, '+');
-	    });
+    var results = <%- JSON.stringify(results) %>;
+    $(".table-row").click(function() {
+      var $this = $(this);
+      var row = $this.attr('row');
+      var id = results[row][0];
+      window.document.location = $this.data("href") + '/' + id;
+    });
 	    
-	    $('.table-row').hover(
-	    	function () {
-	    		$(this).css('background', '#f2f2f2');
-	    	}, 
-	    	function () {
-	    		$(this).css('background', '#ffffff');
-	    	}
-    	);
+    $('.table-row').hover(
+    	function () {
+    		$(this).css('background', '#f2f2f2');
+    	}, 
+    	function () {
+    		$(this).css('background', '#ffffff');
+    	}
+   	);
 	});
 </script>
 <link rel='stylesheet' type='text/css' href='/public/jumbotron.css'>

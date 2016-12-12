@@ -9,20 +9,28 @@
 <script rel="stylesheet" type="text/css" src ="/views/agency.min.css"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	    $(".table-row").click(function() {
-	    	var name = $(this).find('.name-col').text();
-	    	var url = $(this).data("href") + '/' + name;
-	        window.document.location = url.replace(/ /g, '+');
-	    });
-	    
-	    $('.table-row').hover(
-	    	function () {
-	    		$(this).css('background', '#f2f2f2');
-	    	}, 
-	    	function () {
-	    		$(this).css('background', '#ffffff');
-	    	}
-    	);
+	  var headers = <%= headers %>;
+    var results = <%= results %>;
+    var index;
+    for(var i = 0; i < headers.length; i++) {
+      if (headers[i].name === 'countryCode') {
+        index = i;
+      }
+    }
+    $(".table-row").click(function() {
+    	var $this = $(this);
+    	var name = $this.find('.name-col').text();
+    	window.document.location = $this.data("href") + '/' + name;
+    });
+    
+    $('.table-row').hover(
+    	function () {
+    		$(this).css('background', '#f2f2f2');
+    	}, 
+    	function () {
+    		$(this).css('background', '#ffffff');
+    	}
+   	);
 	});
 </script>
 <link rel='stylesheet' type='text/css' href='/public/jumbotron.css'>

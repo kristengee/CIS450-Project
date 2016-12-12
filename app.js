@@ -39,7 +39,7 @@ app.get('/', function (req, res) {
 	res.render('index');
 });
 
-app.get('/athlete', function (req, res) {
+app.get('/athlete/:id', function (req, res) {
 	oracledb.getConnection(
 	  {
 	    user          : "cis550projectklr",
@@ -53,7 +53,7 @@ app.get('/athlete', function (req, res) {
 	      return;
 	    }
 	    connection.execute(
-	      "SELECT a.country, m.type, COUNT(*) FROM MEDAL m INNER JOIN ATHLETE a ON m.athlete_id = a.id WHERE a.name = \'" + req.query.name + "\' GROUP BY m.Type, a.country ",
+	      "SELECT a.country, a.name, a.gender, m.type, COUNT(*) FROM Medal m INNER JOIN Athlete a ON m.athleteID = a.id WHERE a.id = \'" + req.params.id +"\' GROUP BY a.name, m.type, a.country, a.gender",
 	      function(err, result)
 	      {
 	        if (err) {
@@ -61,8 +61,9 @@ app.get('/athlete', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
+	        console.log(result.rows);
 	        res.render('athlete', {
-	        	name: req.query.name,
+	        	id: req.params.id,
 	        	results: result.rows
 	        });
 	        doRelease(connection);
@@ -82,7 +83,7 @@ app.get('/athleteresults', function (req, res) {
 	var condition = "";
 	var words = req.query.query.split(" ");
 	for (var i = 0; i < words.length; i++) {
-		condition += "LOWER(a.name) LIKE LOWER(\'%" + words[i] + "%\') AND ";
+		condition += "LOWER(name) LIKE LOWER(\'%" + words[i] + "%\') AND ";
 	}
 	condition = condition.slice(0, -4);
 	oracledb.getConnection(
@@ -98,7 +99,7 @@ app.get('/athleteresults', function (req, res) {
 	      return;
 	    }
 	    connection.execute(
-	      "SELECT * FROM MEDAL m INNER JOIN ATHLETE a ON m.athlete_id = a.id WHERE " + condition,
+	      "SELECT id, name FROM Athlete WHERE " + condition,
 	      function(err, result)
 	      {
 	        if (err) {
