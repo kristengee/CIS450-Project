@@ -61,7 +61,6 @@ app.get('/athlete/:id', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
-	        console.log(result.rows);
 	        res.render('athlete', {
 	        	id: req.params.id,
 	        	results: result.rows
