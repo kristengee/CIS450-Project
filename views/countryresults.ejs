@@ -7,20 +7,15 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <script rel="stylesheet" type="text/css" src ="/views/agency.min.css"></script>
+<link rel='stylesheet' type='text/css' href='/public/jumbotron.css'>
 <script type="text/javascript">
 	$(document).ready(function() {
-	  var headers = <%= headers %>;
-    var results = <%= results %>;
-    var index;
-    for(var i = 0; i < headers.length; i++) {
-      if (headers[i].name === 'countryCode') {
-        index = i;
-      }
-    }
-    $(".table-row").click(function() {
+		var results = <%- JSON.stringify(results) %>;
+    $('.table-row').click(function() {
     	var $this = $(this);
-    	var name = $this.find('.name-col').text();
-    	window.document.location = $this.data("href") + '/' + name;
+    	var row = $this.attr('row');
+      var code = results[row][0];
+    	window.document.location = $this.data("href") + '/' + code;
     });
     
     $('.table-row').hover(
@@ -93,13 +88,13 @@
 	<div id="results">
 		<table class="table">
 			<tr>
-				<% for (var i = 0; i < headers.length; i++) { %>
+				<% for (var i = 1; i < headers.length; i++) { %>
 					<td><%= headers[i].name %></td>
 				<% } %>
 			</tr>
-			<% for (var i = 0; i < results.length; i++) { %>
+			<% for (var i = 1; i < results.length; i++) { %>
 				<tr class="table-row" row=<%= i %> data-href="/country">
-					<% for (var j = 0; j < results[i].length; j++) { %>
+					<% for (var j = 1; j < results[i].length; j++) { %>
 						<% if (headers[j].name === 'NAME') { %>
               <td class="name-col"><%= results[i][j] %></td>
             <% } else { %>

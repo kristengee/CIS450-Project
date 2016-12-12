@@ -116,8 +116,8 @@ app.get('/athleteresults', function (req, res) {
 	  });
 });
 
-app.get('/country/:name', function (req, res) {
-	db.collection('countries').findOne({Country: req.params.name}, function (err, results) {
+app.get('/country/:code', function (req, res) {
+	db.collection('countries').findOne({Country: req.params.code}, function (err, results) {
 		res.render('country', {data: results});
 	});
 })
