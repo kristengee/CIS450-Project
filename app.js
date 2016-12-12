@@ -74,6 +74,10 @@ app.get('/athletesearch', function (req, res) {
 	res.render('athletesearch');
 })
 
+app.get('/countrysearch', function (req, res) {
+	res.render('countrysearch');
+})
+
 app.get('/athleteresults', function (req, res) {
 	var condition = "";
 	var words = req.query.query.split(" ");

@@ -41,6 +41,8 @@
 	        	<ul class="nav navbar-nav navbar-left">
 	        		<li class="inactive"><a href="/">Home</a></li>
 	        		<li class="inactive"><a href="/athletesearch">Athlete Search</a></li>
+	        		<li class="inactive"><a href="/countrysearch">Country Search</a></li>
+
 	        		<!-- <li class="dropdown">
 	        			<a class="dropdown-toggle" data-toggle="dropdown">About</a>
 	        			<ul class="dropdown-menu" role="menu">
@@ -57,11 +59,32 @@
 	
 	<div class="container">
 	 <div class="col-lg-12">
-	 <center><img src=<%= data.FlagLink %> class="flag"></center>
-	   <h1><%= data.Name %></h1>
-	   
+	 <td>
+	 <h1><%= data.Name %></h1>
+	 	<img src=<%= data.FlagLink %> class="flag">
+	 	<img src=<%= data.GlobeLink %> class="flag">
+	<tr>
+	 <p><b>Population:</b> <%= data.Population %></p>
+	 </tr>
+	 <tr>
+	 <p><b>Continent:</b> <%= data.Continent %></p>
+	 </tr>
+	 <tr>
+	 <p><b>Area:</b> <%= data.Area %> km<sup>2</sup></p>
+	 </tr>
+	 <tr>
+	 <p><b>Nominal GDP:</b> <%= data.NominalGDP %></p>
+	 </tr>
+	 <tr>
+	 <p><b>Nominal GDP per Capita: </b><%= data.NominalGDPperCapita %></p>
+	 </tr>
+	 <p><b>Gini Coefficient: </b><%= data.GiniCoefficient %></p>
+	 </td>
 	 </div>
-	 
+	 	 <td>
+
+	 	</td>
+
 	</div>
 	
 	
