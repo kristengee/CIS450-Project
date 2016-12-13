@@ -25,3 +25,15 @@ td {
   -o-user-select: none;
   user-select: none;
 }
+
+.Gold {
+	color: #ffd700;
+}
+
+.Silver {
+	color: #a9a9a9;
+}
+
+.Bronze {
+	color: #cd7f32;
+}

@@ -54,15 +54,6 @@
         		<li class="inactive"><a href="/">Home</a></li>
         		<li class="active"><a href="/athletesearch">Athlete Search</a></li>
         		<li class="inactive"><a href="/countrysearch">Country Search</a></li>
-        		<!-- <li class="dropdown">
-        			<a class="dropdown-toggle" data-toggle="dropdown">About</a>
-        			<ul class="dropdown-menu" role="menu">
-        				<li class="dropdown-header">About Wasabi</li>
-        				<li><a href="about">Wasabi's Story</a></li>
-        				<li class="dropdown-header">About Us</li>
-        				<li><a href="us">Our Team</a></li>
-        			</ul>
-        		</li> -->
         	</ul>
 </nav>
 
@@ -87,24 +78,9 @@
 	
 	<div id="results">
 		<table class="table">
-			<tr>
-				<% for (var i = 0; i < headers.length; i++) { %>
-					<% if (!headers[i].name.includes('ID')) { %>
-						<td><%= headers[i].name %></td>
-					<% } %>
-				<% } %>
-			</tr>
 			<% for (var i = 0; i < results.length; i++) { %>
 				<tr class="table-row" row=<%= i %> data-href="/athlete">
-					<% for (var j = 0; j < results[i].length; j++) { %>
-						<% if (!headers[j].name.includes('ID')) { %>
-							<% if (headers[j].name === 'NAME') { %>
-								<td class="name-col"><%= results[i][j] %></td>
-							<% } else { %>
-								<td><%= results[i][j] %></td>
-							<% } %>
-						<% } %>
-					<% } %>
+				<td><%= results[i][1] %></td>
 				</tr>
 			<% } %>
 		</table>

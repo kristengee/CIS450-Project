@@ -57,7 +57,12 @@ app.get('/athlete/:id', function (req, res) {
 	      return;
 	    }
 	    connection.execute(
-	      "SELECT a.country, a.name, a.gender, m.type, COUNT(*) FROM Medal m INNER JOIN Athlete a ON m.athleteID = a.id WHERE a.id = \'" + req.params.id +"\' GROUP BY a.name, m.type, a.country, a.gender",
+	      "SELECT a.name, a.gender, a.country, m.year, m.type, m.city, s.sport, s.event " +
+	      "FROM Athlete a " +
+	      "INNER JOIN Medal m ON a.id = m.athleteID " +
+	      "INNER JOIN Sport s ON m.sportID = s.id " +
+	      "WHERE a.id = '" + req.params.id + "' " +
+	      "ORDER BY m.year",
 	      function(err, result)
 	      {
 	        if (err) {
@@ -65,10 +70,15 @@ app.get('/athlete/:id', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
-	        var name = result.rows[0][1].split(", ");
-	        var page = (name[1] + " " + name[0]).replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+	        console.log(result.metaData);
+	        console.log(result.rows);
+	        var name = result.rows[0][0].split(", ");
+	        var page = (name[1] + " " + name[0]).replace(/\w\S*/g, function (txt) {
+	        	return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+	        });
 			var language = 'en';
 			var a;
+		
 			infobox(page, language, function (err, data) {
 				if (err) {
 					// Render page without infobox data if it was not found
@@ -144,8 +154,40 @@ app.get('/athleteresults', function (req, res) {
 });
 
 app.get('/country/:code', function (req, res) {
-	db.collection('countries').findOne({Country: req.params.code}, function (err, results) {
-		res.render('country', {data: results});
+	db.collection('countries').findOne({Country: req.params.code}, function (error, results) {
+		if(error) {
+			console.log(error);
+			return;
+		}
+		oracledb.getConnection(
+		  {
+		    user          : "cis550projectklr",
+		    password      : "cis550projectgco",
+		    connectString : "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=cis550project.czyk6pisuibz.us-west-2.rds.amazonaws.com)(PORT=1521))(CONNECT_DATA=(SID=MyDB)))"
+		  },
+		  function(err, connection)
+		  {
+		    if (err) {
+		      console.error(err.message);
+		      return;
+		    }
+		    connection.execute(
+		      "SELECT numAthletes, numMedals FROM Country WHERE countryCode = '" + req.params.code + "'",
+		      function(err, result)
+		      {
+		        if (err) {
+		          console.error(err.message);
+		          doRelease(connection);
+		          return;
+		        }
+		        res.render('country', {
+		        	numAthletes: result.rows[0][0],
+		        	numMedals: result.rows[0][1],
+		        	data: results
+		        });
+		        doRelease(connection);
+		      });
+		  });
 	});
 })
 
