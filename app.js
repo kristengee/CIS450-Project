@@ -70,8 +70,6 @@ app.get('/athlete/:id', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
-	        console.log(result.metaData);
-	        console.log(result.rows);
 	        var name = result.rows[0][0].split(", ");
 	        var page = (name[1] + " " + name[0]).replace(/\w\S*/g, function (txt) {
 	        	return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -92,9 +90,15 @@ app.get('/athlete/:id', function (req, res) {
 					a = data;
 					var bday = a.birth_date.value.replace(/[{}]/g, "").split('|');
 					var birthdate = bday[2] + '/' + bday[3] + '/' + bday[1];
-					var imgFileName = data.image.value.replace(/ /g, "_");
-					var hash = md5(imgFileName);
-					var imgURL = "https://upload.wikimedia.org/wikipedia/commons/" + hash.substring(0,1) + "/" + hash.substring(0,2) + "/" + imgFileName;
+					var imgURL;
+					if (data.image) {
+						var imgFileName = data.image.value.replace(/ /g, "_");
+						var hash = md5(imgFileName);
+						imgURL = "https://upload.wikimedia.org/wikipedia/commons/" + hash.substring(0,1) + "/" + hash.substring(0,2) + "/" + imgFileName;
+					} else {
+						imgURL = null;
+					}
+					
 	        		res.render('athlete', {
 	        			id: req.params.id,
 	        			results: result.rows,
@@ -220,6 +224,7 @@ app.get('/countryresults', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
+	        console.log(result.rows);
 	        res.render('countryresults', {
 	        	headers: result.metaData,
 	        	results: result.rows
