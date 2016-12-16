@@ -9,6 +9,8 @@
   "author": "Abdu",
   "license": "ISC",
   "dependencies": {
-    "oracledb": "^1.11.0"
+    "blueimp-md5": "^2.6.0",
+    "oracledb": "^1.11.0",
+    "wiki-infobox": "^0.4.0"
   }
 }
