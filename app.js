@@ -96,7 +96,7 @@ app.get('/athlete/:id', function (req, res) {
 						var hash = md5(imgFileName);
 						imgURL = "https://upload.wikimedia.org/wikipedia/commons/" + hash.substring(0,1) + "/" + hash.substring(0,2) + "/" + imgFileName;
 					} else {
-						imgURL = null;
+						imgURL = null;	
 					}
 					
 	        		res.render('athlete', {
@@ -216,7 +216,7 @@ app.get('/countryresults', function (req, res) {
 	      return;
 	    }
 	    connection.execute(
-	      "SELECT * FROM Country WHERE " + condition,
+	      "SELECT countryCode, name FROM Country WHERE " + condition,
 	      function(err, result)
 	      {
 	        if (err) {
@@ -224,7 +224,6 @@ app.get('/countryresults', function (req, res) {
 	          doRelease(connection);
 	          return;
 	        }
-	        console.log(result.rows);
 	        res.render('countryresults', {
 	        	headers: result.metaData,
 	        	results: result.rows
